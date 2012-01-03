@@ -139,6 +139,14 @@ modified.")
 In auto-capitalize mode, it is called with no arguments and should return a
 non-nil value if the current word is within \"normal\" text.")
 
+;; User customization
+(defcustom auto-capitalize-newline-command
+  '(newline
+    newline-and-indent
+    org-return)
+  "newline commands."
+  :group 'auto-capitalize)
+
 ;; Internal variables:
 
 (defconst auto-capitalize-version "$Revision: 2.20 $"
@@ -146,7 +154,7 @@ non-nil value if the current word is within \"normal\" text.")
 
 
 ;; Commands:
-	
+
 (defun auto-capitalize-mode (&optional arg)
   "Toggle `auto-capitalize' minor mode in this buffer.
 With optional prefix ARG, turn `auto-capitalize' mode on iff ARG is positive.
@@ -228,8 +236,7 @@ This should be installed as an `after-change-function'."
 							nil nil t))
 				   (t last-command-event)))) ; GNU Emacs
 			(not (equal (char-syntax self-insert-char) ?w))))
-		 (eq this-command 'newline)
-		 (eq this-command 'newline-and-indent))
+                 (memq this-command auto-capitalize-newline-command))
 	     ;; self-inserting, non-word character
 	     (if (and (> beg (point-min))
 		      (equal (char-syntax (char-after (1- beg))) ?w))
