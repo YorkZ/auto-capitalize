@@ -275,13 +275,12 @@ This should be installed as an `after-change-function'."
 							 :key 'downcase
 							 :test 'string-equal)
 						   t t))))
-			     ((and (or (equal text-start (point-min)) ; (bobp)
-				       (progn ; beginning of paragraph?
+			     ((and (or (progn ; beginning of paragraph?
 					 (goto-char text-start)
 					 (and (looking-back "^[ \t]*"
                                                             (line-beginning-position))
-					      (zerop (forward-line -1))
-					      (looking-at paragraph-separate)))
+                                              (or (/= 0 (forward-line -1)) ; bobp
+                                                  (looking-at paragraph-separate))))
 				       (progn ; beginning of paragraph?
 					 (goto-char text-start)
 					 (and (looking-back "^[ \t]*"
