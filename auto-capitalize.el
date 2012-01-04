@@ -278,12 +278,14 @@ This should be installed as an `after-change-function'."
 			     ((and (or (equal text-start (point-min)) ; (bobp)
 				       (progn ; beginning of paragraph?
 					 (goto-char text-start)
-					 (and (= (current-column) left-margin)
+					 (and (looking-back "^[ \t]*"
+                                                            (line-beginning-position))
 					      (zerop (forward-line -1))
 					      (looking-at paragraph-separate)))
 				       (progn ; beginning of paragraph?
 					 (goto-char text-start)
-					 (and (= (current-column) left-margin)
+					 (and (looking-back "^[ \t]*"
+                                                            (line-beginning-position))
 					      (re-search-backward paragraph-start
 								  nil t)
 					      (= (match-end 0) text-start)
