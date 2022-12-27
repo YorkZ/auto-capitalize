@@ -96,7 +96,7 @@
 
 (provide 'auto-capitalize)
 
-(require 'cl)				; find, minusp
+(require 'cl-lib)                       ; cl-find, cl-minusp
 
 
 ;; User options:
@@ -145,6 +145,7 @@ non-nil value if the current word is within \"normal\" text.")
     newline-and-indent
     org-return)
   "newline commands."
+  :type 'list
   :group 'auto-capitalize)
 
 ;; Internal variables:
@@ -247,8 +248,8 @@ This should be installed as an `after-change-function'."
 		     (let* ((word-start (point))
 			    (text-start
 			     (progn
-			       (while (or (minusp (skip-chars-backward "\""))
-					  (minusp (skip-syntax-backward "\"(")))
+			       (while (or (cl-minusp (skip-chars-backward "\""))
+					  (cl-minusp (skip-syntax-backward "\"(")))
 				 t)
 			       (point)))
 			    lowercase-word)
@@ -270,10 +271,10 @@ This should be installed as an `after-change-function'."
 				  ;; not preserving lower case
 				  (progn ; capitalize!
 				    (undo-boundary)
-				    (replace-match (find lowercase-word
-							 auto-capitalize-words
-							 :key 'downcase
-							 :test 'string-equal)
+				    (replace-match (cl-find lowercase-word
+							    auto-capitalize-words
+							    :key 'downcase
+							    :test 'string-equal)
 						   t t))))
 			     ((and (or (progn ; beginning of paragraph?
 					 (goto-char text-start)
